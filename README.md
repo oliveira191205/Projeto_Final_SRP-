@@ -1,5 +1,5 @@
 # Controle de Estacionamento 
-Projeto desenvolvido em **PHP 8** e **SQLite**, utilizando princípios de  
+Projeto desenvolvido em **PHP 8** e **MYSQL**, utilizando princípios de  
 **Clean Code**, **SOLID** e **PSR-4**.
 
 Este sistema permite gerenciar a entrada e saída de veículos em um estacionamento, calcular tarifas automaticamente e gerar relatórios de faturamento.
@@ -86,46 +86,50 @@ C:\xampp\htdocs\projeto-final-SRP
 ### 3. Iniciar o Apache e MySQL
 Abra o XAMPP Control Panel e clique em **Start** no módulo Apache e MySQL.
 
-### 4. Registrar no banco
-Acesse o apache e vá no botão "Admin" do MySQL;
-Vá em criar novo banco, o nome deve ser 'srp';
-Dentro do banco, copie as tabelas que estão dentro do arquivo 'src/Infra/database.sql' e execute;
+### 4. Instalar banco de dados e criar tabelas
+Antes de iniciar o sistema, é necessário criar automaticamente o banco de dados e todas as tabelas.
+
+Abra o navegador e acesse:
+```
+http://localhost/Projeto_Final_SRP/src/Infra/install.php
+```
+Se tudo estiver correto, aparecerá a mensagem:
+ ```
+Banco de dados criado com sucesso!
+```
+Depois disso, o sistema já estará pronto para uso.
 
 ### 5. Acessar o sistema
-Abra:
-
+Abra o navegador e acesse:
 ```
-http://localhost/projeto-final-SRP/public
+http://localhost/Projeto_Final_SRP/public
 ```
-
----
 
 ## Estrutura do Banco de Dados
 
 ### Tabela: `parking`
 
-| Campo        | Tipo | Descrição                                  |
-|--------------|------|--------------------------------------------|
-| `id`         | INT  | Identificador único do registro            |
-| `model`      | TEXT  | Modelo do veiculo                         |               
-| `type`       | TEXT | Tipo do veículo (carro, moto, caminhão)    |
-| `entry_time` | DATETIME | Data e hora de entrada                 |
-| `exit_time`  | DATETIME | Data e hora de saída                   |
-| `total_hours`| INT | Cálculo no total de horas                   |
-| `price`      | DEC | Valor calculado pelo sistema                |
+| Campo        | Tipo     | Descrição                                  |
+|--------------|----------|--------------------------------------------|
+| `id`         |    INT   | Identificador único do registro            |
+| `model`      | VARCHAR  | Modelo do veiculo                          |               
+| `type`       | VARCHAR  | Tipo do veículo (carro, moto, caminhão)    |
+| `entry_time` | DATETIME | Data e hora de entrada                     |
+| `exit_time`  | DATETIME | Data e hora de saída                       |
+| `total_hours`|    INT   | Cálculo no total de horas                  |
+| `price`      |  DECIMAL | Valor calculado pelo sistema               |
 
 ### Tabela: `vehicles`
 
-| Campo        | Tipo | Descrição                                  |
-|--------------|------|--------------------------------------------|
-| `id`         | INT  | Identificador único do veiculo             |
-| `model`      | TEXT  | Modelo do veiculo                         |               
-| `type`       | TEXT | Tipo do veículo (carro, moto, caminhão)    |
+| Campo        | Tipo     | Descrição                                  |
+|--------------|----------|--------------------------------------------|
+| `id`         |   INT    | Identificador único do veiculo             |
+| `model`      | VARCHAR  | Modelo do veiculo                          |               
+| `type`       | VARCHAR  | Tipo do veículo (carro, moto, caminhão)    |
 
 ---
 
 ## Como Testar
-
 ### Cadastro
 Acesse a página de entrada e informe:
 - Modelo;  
@@ -134,10 +138,8 @@ Acesse a página de entrada e informe:
 - Saída (aaaa-mm-dd hh:mm).
 Aperte o botão "Registrar Estadia".
 
-
 ### Visualizar relatório
 Exibe:
 - Quantidade de veículos por tipo  
 - Faturamento total acumulado  
-
 ---
