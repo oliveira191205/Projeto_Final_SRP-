@@ -7,16 +7,36 @@ use Domain\VehicleRepository;
 
 class MySQLVehicleRepository implements VehicleRepository
 {
-    private PDO $conn; //para conexão com banco
+    private PDO $conn;
 
     public function __construct()
     {
         $host = "localhost";
-        $dbname = "srp"; 
+        $dbname = "srp";
         $user = "root";
         $pass = "";
 
-        $this->conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+        try {
+            // vai tentar conectar o banco
+            $this->conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+        } catch (\PDOException $e) {
+
+            // Se nao existir, vai criar 
+            $temp = new PDO("mysql:host=$host;charset=utf8", $user, $pass);
+            $temp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $sqlFile = __DIR__ . "/../database.sql"; 
+
+            if (file_exists($sqlFile)) {
+                $sql = file_get_contents($sqlFile);
+                $temp->exec($sql); //banco + tabelas
+            } else {
+                die("Arquivo database.sql não encontrado em: $sqlFile");
+            }
+
+            $this->conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
+        }
+
         $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
@@ -55,5 +75,5 @@ class MySQLVehicleRepository implements VehicleRepository
         $stmt = $this->conn->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
 }
+
